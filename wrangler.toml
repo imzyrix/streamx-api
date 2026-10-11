@@ -1,6 +1,5 @@
 name = "streamx-api"
-compatibility_date = "2025-05-01"
 pages_build_output_dir = "public"
 
 [vars]
-CACHE_TTL = "86400"
+CACHE_TTL = 86400
