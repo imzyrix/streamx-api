@@ -1,3 +1,12 @@
+/*
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
+ || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
+  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+     ZyrixDev — Crafted with precision for seamless streaming data.
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+*/
+
 export const BROWSER_UA =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 

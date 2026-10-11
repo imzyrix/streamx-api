@@ -1,3 +1,12 @@
+/*
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
+ || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
+  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+     ZyrixDev — Crafted with precision for seamless streaming data.
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+*/
+
 #!/usr/bin/env node
 // Zero-dependency MCP server for the StreamX API.
 // Exposes the API as tools over the Model Context Protocol stdio transport.

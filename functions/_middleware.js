@@ -1,3 +1,12 @@
+/*
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
+ || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
+  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+     ZyrixDev — Crafted with precision for seamless streaming data.
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+*/
+
 const CORS = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, HEAD, OPTIONS",

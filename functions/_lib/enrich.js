@@ -1,3 +1,12 @@
+/*
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
+ || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
+  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+     ZyrixDev — Crafted with precision for seamless streaming data.
+     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
+*/
+
 const WIKIDATA_ENDPOINT = "https://query.wikidata.org/sparql";
 const USER_AGENT = "StreamX-API/1.1 (+https://streamx.qzz.io)";
 const WEEK = 604800;
