@@ -1,5 +1,11 @@
 # StreamX API
 
+<p align="center">
+  <a href="https://github.com/imzyrix/streamx-api">
+    <img src="banner.svg" alt="StreamX API — Keyless movie & TV metadata API" width="100%">
+  </a>
+</p>
+
 > Keyless, self-hostable **movie & TV metadata, artwork, scores, credits and where-to-watch** API — runs on **Cloudflare Pages Functions, Vercel, Railway, Render or any Docker host**. Catalogues, search, full poster/backdrop/logo sets, episode stills, critic & audience ratings, cast & crew, person bios, similar titles, streaming availability and rich facts from Wikidata, Wikipedia, Rotten Tomatoes, Metacritic, JustWatch, TVmaze and AniList.
 
 ```
