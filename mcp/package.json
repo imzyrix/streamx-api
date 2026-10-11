@@ -1,7 +1,6 @@
 {
-  "name": "streamx-api-mcp",
+  "name": "@imzyrix/streamx-api-mcp",
   "version": "1.3.0",
-  "private": true,
   "type": "module",
   "description": "Zero-dependency MCP server exposing the StreamX API as tools.",
   "license": "MIT",
@@ -11,6 +10,30 @@
     "url": "https://github.com/imzyrix/streamx-api.git",
     "directory": "mcp"
   },
-  "bin": { "streamx-mcp": "server.mjs" },
-  "scripts": { "start": "node server.mjs" }
+  "homepage": "https://github.com/imzyrix/streamx-api/tree/main/mcp#readme",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "streamx",
+    "streamx-api",
+    "movie-api",
+    "tv-api",
+    "metadata"
+  ],
+  "bin": {
+    "streamx-mcp": "server.mjs"
+  },
+  "files": [
+    "server.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
