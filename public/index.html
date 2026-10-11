@@ -62,30 +62,41 @@
       <header>
         <h1>Stream<span>X</span> API</h1>
         <p class="lead">
-          Movie &amp; TV metadata and posters. Self-hosted on Cloudflare Pages, edge-cached.
+          Movie &amp; TV metadata, full artwork sets and episode stills. Self-hosted on Cloudflare Pages, edge-cached.
         </p>
         <p class="badge">No API key required</p>
-        <p class="sample">Status: <a href="/health">/health</a></p>
+        <p class="sample">Status: <a href="/health">/health</a> · Docs: <a href="https://github.com/imzyrix/streamx-api">README</a></p>
       </header>
 
       <h2>Discovery</h2>
       <ul>
         <li><code>GET /catalog/movie/top?genre=Action&amp;skip=0</code><span class="m">Top movies</span></li>
         <li><code>GET /catalog/series/top?genre=Drama</code><span class="m">Top series</span></li>
-        <li><code>GET /search?q=dune&amp;type=movie</code><span class="m">Search</span></li>
+        <li><code>GET /search?q=dune&amp;type=movie</code><span class="m">Search (Cinemeta)</span></li>
+        <li><code>GET /imdb/search?q=dune</code><span class="m">IMDb search + posters + stars</span></li>
       </ul>
 
       <h2>Details</h2>
       <ul>
-        <li><code>GET /meta/movie/tt0133093</code><span class="m">Movie details</span></li>
-        <li><code>GET /meta/series/tt0944947</code><span class="m">Series details + episodes</span></li>
+        <li><code>GET /meta/movie/tt0133093</code><span class="m">Movie: images, facts, Wikipedia plot</span></li>
+        <li><code>GET /meta/series/tt0944947</code><span class="m">Series: episodes, seasons, stills</span></li>
       </ul>
 
       <h2>Images</h2>
       <ul>
+        <li><code>GET /images/movie/tt0133093</code><span class="m">Full artwork set (poster/backdrop/logo &#215; 4 sizes)</span></li>
         <li><code>GET /img/poster/medium/tt0133093/img</code><span class="m">Poster</span></li>
         <li><code>GET /img/background/large/tt0133093/img</code><span class="m">Backdrop</span></li>
-        <li><code>GET /img/logo/medium/tt0133093/img</code><span class="m">Logo</span></li>
+        <li><code>GET /img/logo/original/tt0133093/img</code><span class="m">Logo</span></li>
+        <li><code>GET /img/still/tt0944947/1/1/w780</code><span class="m">Episode still</span></li>
+      </ul>
+
+      <h2>Data sources</h2>
+      <ul>
+        <li><code>Cinemeta</code><span class="m">Titles, cast, ratings, episodes</span></li>
+        <li><code>MetaHub</code><span class="m">Posters, backdrops, logos, episode stills</span></li>
+        <li><code>Wikidata &amp; Wikipedia</code><span class="m">Budget, box office, companies, external IDs, plot</span></li>
+        <li><code>IMDb</code><span class="m">Search suggestions with posters and top cast</span></li>
       </ul>
 
       <h2>Raw</h2>
