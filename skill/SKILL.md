@@ -1,12 +1,3 @@
-/*
-     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
-  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
- || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
-  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-     ZyrixDev — Crafted with precision for seamless streaming data.
-     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
-*/
-
 ---
 name: streamx-api
 description: Use the StreamX API to fetch movie and TV metadata, search titles, get posters/backdrops/logos and episode stills, critic scores (IMDb, Rotten Tomatoes, Metacritic), cast and crew, similar titles, person bios, and where-to-watch streaming providers. Trigger this skill whenever a task needs film/show data, artwork, ratings, credits or streaming availability without registering for an API key. No API key is ever required.

@@ -1,12 +1,3 @@
-/*
-     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
-  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
- || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
-  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-     ZyrixDev — Crafted with precision for seamless streaming data.
-     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
-*/
-
 import { fetchImage, fail, METAHUB } from "../_lib/upstream.js";
 import { upstreamStillUrl } from "../_lib/images.js";
 

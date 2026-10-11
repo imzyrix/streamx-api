@@ -1,12 +1,3 @@
-/*
-     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
-  //\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\//\
- || StreamX API — by @imzyrix & @zyrixdevs | https://github.com/imzyrix/streamx-api ||
-  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-     ZyrixDev — Crafted with precision for seamless streaming data.
-     _   _   _   _   _   _   _   _   _   _   _   _   _   _   _   _
-*/
-
 export const CINEMETA = "https://v3-cinemeta.strem.io";
 export const METAHUB = "https://images.metahub.space";
 
