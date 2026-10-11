@@ -62,7 +62,8 @@
       <header>
         <h1>Stream<span>X</span> API</h1>
         <p class="lead">
-          Movie &amp; TV metadata, full artwork sets and episode stills. Self-hosted on Cloudflare Pages, edge-cached.
+          Movie &amp; TV metadata, artwork sets, episode stills, critic scores and where-to-watch.
+          Self-hosted on Cloudflare Pages, edge-cached, no API key.
         </p>
         <p class="badge">No API key required</p>
         <p class="sample">Status: <a href="/health">/health</a> · Docs: <a href="https://github.com/imzyrix/streamx-api">README</a></p>
@@ -82,6 +83,15 @@
         <li><code>GET /meta/series/tt0944947</code><span class="m">Series: episodes, seasons, stills</span></li>
       </ul>
 
+      <h2>Scores &amp; where to watch</h2>
+      <ul>
+        <li><code>GET /scores/movie/tt0133093</code><span class="m">IMDb + Rotten Tomatoes + Metacritic</span></li>
+        <li><code>GET /scores/series/tt0944947</code><span class="m">Series critic &amp; audience scores</span></li>
+        <li><code>GET /streaming/movie/tt0133093?country=US</code><span class="m">JustWatch providers (rent/buy/stream)</span></li>
+        <li><code>GET /tv/tt0944947</code><span class="m">TVmaze show info (network, schedule, rating)</span></li>
+        <li><code>GET /anime/search?q=frieren</code><span class="m">AniList anime search</span></li>
+      </ul>
+
       <h2>Images</h2>
       <ul>
         <li><code>GET /images/movie/tt0133093</code><span class="m">Full artwork set (poster/backdrop/logo &#215; 4 sizes)</span></li>
@@ -97,6 +107,11 @@
         <li><code>MetaHub</code><span class="m">Posters, backdrops, logos, episode stills</span></li>
         <li><code>Wikidata &amp; Wikipedia</code><span class="m">Budget, box office, companies, external IDs, plot</span></li>
         <li><code>IMDb</code><span class="m">Search suggestions with posters and top cast</span></li>
+        <li><code>Rotten Tomatoes</code><span class="m">Tomatometer &amp; Popcornmeter scores</span></li>
+        <li><code>Metacritic</code><span class="m">Metascore and review counts</span></li>
+        <li><code>JustWatch</code><span class="m">Where to stream, rent or buy</span></li>
+        <li><code>TVmaze</code><span class="m">TV show info, network and status</span></li>
+        <li><code>AniList</code><span class="m">Anime search, scores and art</span></li>
       </ul>
 
       <h2>Raw</h2>

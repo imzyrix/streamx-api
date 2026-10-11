@@ -1,6 +1,6 @@
 import { json } from "./_lib/upstream.js";
 
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 
 export function onRequestGet() {
   return json(
@@ -9,12 +9,27 @@ export function onRequestGet() {
       service: "streamx-api",
       version: VERSION,
       requiresApiKey: false,
-      upstreams: ["cinemeta", "metahub", "wikidata", "wikipedia", "imdb-suggestion"],
+      upstreams: [
+        "cinemeta",
+        "metahub",
+        "wikidata",
+        "wikipedia",
+        "imdb-suggestion",
+        "rottentomatoes",
+        "metacritic",
+        "justwatch",
+        "tvmaze",
+        "anilist",
+      ],
       endpoints: {
         catalog: "/catalog/:type/:catalog?genre=&skip=&search=",
         search: "/search?q=&type=movie|series&skip=",
         imdbSearch: "/imdb/search?q=",
         meta: "/meta/:type/:id?enrich=0",
+        scores: "/scores/:type/:id",
+        streaming: "/streaming/:type/:id?country=US",
+        tv: "/tv/:id",
+        anime: "/anime/search?q=",
         images: "/images/:type/:id?direct=1",
         image: "/img/:kind/:size/:id/img",
         still: "/img/still/:id/:season/:episode/:size",
