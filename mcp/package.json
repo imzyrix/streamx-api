@@ -1,0 +1,9 @@
+{
+  "name": "streamx-api-mcp",
+  "version": "1.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency MCP server exposing the StreamX API as tools.",
+  "bin": { "streamx-mcp": "server.mjs" },
+  "scripts": { "start": "node server.mjs" }
+}

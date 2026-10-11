@@ -16,6 +16,11 @@ function withTimeout(promise, ms) {
   ]);
 }
 
+// ORIGINAL (preserved, not deleted — disabled by comment): the Cloudflare-only
+// version built a Request unconditionally, which throws on Node/Vercel where the
+// cache key is not an absolute URL. The rewrite below only touches the cache when
+// both a cache and a valid cache key exist, so the same code runs everywhere.
+/*
 export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000) {
   const cache = cacheStore();
   const request = new Request(key, { method: "GET" });
@@ -26,7 +31,7 @@ export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000)
       try {
         return await hit.json();
       } catch {
-        /* recompute */
+        // recompute
       }
     }
   }
@@ -42,6 +47,49 @@ export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000)
     context.waitUntil(
       cache.put(
         request,
+        new Response(JSON.stringify(data), {
+          headers: { "content-type": "application/json", "cache-control": `public, max-age=${ttl}` },
+        }),
+      ),
+    );
+  }
+
+  return data;
+}
+*/
+
+export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000) {
+  const cache = cacheStore();
+  let cacheRequest = null;
+  if (cache) {
+    try {
+      cacheRequest = new Request(key, { method: "GET" });
+    } catch {
+      cacheRequest = null;
+    }
+    if (cacheRequest) {
+      const hit = await cache.match(cacheRequest);
+      if (hit) {
+        try {
+          return await hit.json();
+        } catch {
+          /* recompute */
+        }
+      }
+    }
+  }
+
+  let data = null;
+  try {
+    data = await withTimeout(producer(), timeoutMs);
+  } catch {
+    return null;
+  }
+
+  if (data && cache && cacheRequest && context && context.waitUntil) {
+    context.waitUntil(
+      cache.put(
+        cacheRequest,
         new Response(JSON.stringify(data), {
           headers: { "content-type": "application/json", "cache-control": `public, max-age=${ttl}` },
         }),

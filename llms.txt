@@ -1,0 +1,35 @@
+# StreamX API
+
+> Keyless, self-hostable movie & TV metadata API. Search titles, get details,
+> posters/backdrops/logos and episode stills, critic scores (IMDb, Rotten Tomatoes,
+> Metacritic), cast & crew, person bios, similar titles, TV/anime data and
+> where-to-watch streaming providers. No API key, ever.
+
+Base URL: https://api.streamx.qzz.io (fallback https://streamx-api.pages.dev)
+
+## Start here
+
+- [Agent skill](./skill/SKILL.md): drop-in instructions any AI agent can follow.
+- [Full reference](./skill/reference.md): every endpoint, param and response field.
+- [MCP server](./mcp/README.md): expose the API to MCP-capable agents.
+- [Self-hosting & forks](./docs/SELF-HOST.md): run your own copy anywhere.
+- [README](./README.md): architecture, deploy buttons, comparison, roadmap.
+
+## Quick usage
+
+- Search: `GET /search?q=dune&type=movie` → `metas[].id`
+- Details: `GET /meta/movie/tt0133093`
+- Scores: `GET /scores/movie/tt0133093`
+- Streaming: `GET /streaming/movie/tt0133093?country=US`
+- Credits: `GET /credits/movie/tt0133093`
+- Person: `GET /person/nm0000206`
+- Similar: `GET /similar/movie/tt0133093`
+- Trending: `GET /trending/movie`
+- Posters: `https://api.streamx.qzz.io/img/poster/medium/tt0133093/img`
+- Status: `GET /health`
+
+## Notes
+
+- All routes are `GET`/`HEAD`; `OPTIONS` → `204`; CORS `*`.
+- `:type` = `movie` | `series`; ids are IMDb `tt…`; person ids are `nm…` or `Q…`.
+- Upstream enrichment is fail-soft: optional fields may be `null`.

@@ -1,12 +1,19 @@
 # StreamX API
 
-> Keyless, self-hostable **movie & TV metadata, artwork, scores and where-to-watch** API for **Cloudflare Pages Functions** — catalogues, search, full poster/backdrop/logo sets, episode stills, critic & audience ratings, streaming availability and rich facts from Wikidata, Wikipedia, Rotten Tomatoes, Metacritic, JustWatch, TVmaze and AniList.
+> Keyless, self-hostable **movie & TV metadata, artwork, scores, credits and where-to-watch** API — runs on **Cloudflare Pages Functions, Vercel, Railway, Render or any Docker host**. Catalogues, search, full poster/backdrop/logo sets, episode stills, critic & audience ratings, cast & crew, person bios, similar titles, streaming availability and rich facts from Wikidata, Wikipedia, Rotten Tomatoes, Metacritic, JustWatch, TVmaze and AniList.
 
 ```
 https://api.streamx.qzz.io
 ```
 
-**No API keys. No sign-up. No secrets.** Everything is read from public endpoints and cached at the Cloudflare edge. Version **1.2.0**.
+**No API keys. No sign-up. No secrets.** Everything is read from public endpoints and cached at the edge. Version **1.3.0**.
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/imzyrix/streamx-api)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/imzyrix/streamx-api)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/imzyrix/streamx-api)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/imzyrix/streamx-api)
+
+**Use it hosted — or fork it and run your own.** → [Self-hosting & forks](#self-hosting--forks) · **Using an AI agent?** → [For AI agents](#for-ai-agents)
 
 ---
 
@@ -17,12 +24,20 @@ https://api.streamx.qzz.io
 - [Data sources](#data-sources)
 - [Architecture & project layout](#architecture--project-layout)
 - [Quick start (local)](#quick-start-local)
-- [Deploy to Cloudflare Pages](#deploy-to-cloudflare-pages)
+- [Deploy](#deploy)
+  - [Cloudflare Pages (primary)](#cloudflare-pages-primary)
+  - [Vercel](#vercel)
+  - [Railway](#railway)
+  - [Render / Fly / Docker](#render--fly--docker)
+- [For AI agents](#for-ai-agents)
+- [Self-hosting & forks](#self-hosting--forks)
 - [Configuration](#configuration)
 - [API reference](#api-reference)
   - [Discovery](#discovery)
   - [Details](#details)
   - [Scores & ratings](#scores--ratings)
+  - [People (credits, bios, similar)](#people-credits-bios-similar)
+  - [Trending](#trending)
   - [Where to watch](#where-to-watch)
   - [TV & anime](#tv--anime)
   - [Images & stills](#images--stills)
@@ -86,6 +101,12 @@ is designed to be embedded in anything: web, mobile, TV, bots or CLIs.
 - **Metacritic** **Metascore**, review count and content rating.
 - All returned together, with per-source availability flags.
 
+### People & more
+- **Cast & crew** with roles, photos and Wikidata/IMDb ids (`/credits`).
+- **Person bios** with image, birth/death, social ids and a Wikipedia summary (`/person`).
+- **Similar titles** — sequels and other works by the same director (`/similar`).
+- **Trending** titles (`/trending`).
+
 ### Where to watch
 - **JustWatch** streaming availability by country: subscription, free, rent and buy.
 - Per-provider deep links and a canonical JustWatch URL.
@@ -140,6 +161,7 @@ api/
 │   │   ├── images.js        # artwork kinds/sizes, still sizes, manifest & URL builders
 │   │   ├── enrich.js        # Wikidata SPARQL, Wikipedia summary, IMDb suggestion
 │   │   ├── scrape.js        # cached fetch helpers, browser UA, HTML stripping
+│   │   ├── people.js        # cast/crew, person bio, similar titles (Wikidata)
 │   │   ├── scores.js        # Rotten Tomatoes + Metacritic parsing
 │   │   ├── watch.js         # JustWatch offers (GraphQL)
 │   │   └── tvmaze.js        # TVmaze show lookup + AniList search
@@ -151,18 +173,31 @@ api/
 │   ├── catalog/[type]/[catalog].js   # /catalog/:type/:catalog
 │   ├── meta/[type]/[id].js            # /meta/:type/:id
 │   ├── scores/[type]/[id].js          # /scores/:type/:id
+│   ├── credits/[type]/[id].js         # /credits/:type/:id
+│   ├── person/[id].js                 # /person/:id
+│   ├── similar/[type]/[id].js         # /similar/:type/:id
+│   ├── trending/[type].js             # /trending/:type
 │   ├── streaming/[type]/[id].js       # /streaming/:type/:id
 │   ├── tv/[id].js                     # /tv/:id
 │   ├── images/[type]/[id].js          # /images/:type/:id
 │   ├── img/[[path]].js                # /img/... artwork + stills proxy
 │   └── cinemeta/[[path]].js           # /cinemeta/... raw passthrough
-├── public/
-│   ├── index.html           # landing / quick reference
-│   └── _routes.json
-├── _preserved/tmdb-functions/   # old key-based implementation (not deployed)
-├── wrangler.toml
+├── server/                     # portable Node server (Docker / Railway / Render / Fly)
+│   ├── app.js                  # URL → handler dispatcher, shared by every runtime
+│   └── index.js                # plain node:http server
+├── api/index.js                # Vercel serverless entry (reuses server/app.js)
+├── skill/                      # AI agent skill (SKILL.md + reference.md)
+├── mcp/                        # zero-dependency MCP server exposing the API as tools
+├── docs/SELF-HOST.md           # fork & self-host guide
+├── llms.txt · llms-full.txt    # AI discovery docs
+├── public/                     # landing / quick reference page
+├── _preserved/tmdb-functions/  # old key-based implementation (not deployed)
+├── Dockerfile · vercel.json · railway.json · render.yaml · fly.toml · wrangler.toml
 └── package.json
 ```
+
+The same route handlers power **Cloudflare Pages Functions** and the **portable Node
+server** — `server/app.js` maps every URL to the matching `functions/**` handler.
 
 Underscore-prefixed files/folders (`_lib`, `_middleware.js`) are **not** routed.
 
@@ -188,9 +223,18 @@ curl http://localhost:8788/scores/movie/tt0133093
 
 ---
 
-## Deploy to Cloudflare Pages
+## Deploy
 
-### Option A — Wrangler CLI
+One-click buttons (also at the top of this README):
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/imzyrix/streamx-api)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/imzyrix/streamx-api)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/imzyrix/streamx-api)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/imzyrix/streamx-api)
+
+### Cloudflare Pages (primary)
+
+**Wrangler CLI**
 
 ```bash
 cd api
@@ -201,24 +245,88 @@ npx wrangler pages deploy
 
 Wrangler creates the project and prints `https://<project>.pages.dev`.
 
-### Option B — Git integration
+**Git integration** — Cloudflare dashboard → **Workers & Pages → Create → Pages →
+Connect to Git**. Root directory `/`, build command *(empty)*, build output `public`.
+No environment variables required.
 
-1. Push this repo to GitHub.
-2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**.
-3. **Root directory:** `/` · **Build command:** *(empty)* · **Build output:** `public`.
-4. Deploy. No environment variables are required.
+**Direct upload** — `npx wrangler pages deploy public`.
 
-### Option C — Direct upload
+**Custom domain** — Pages project → **Custom domains**. Use a **proxied CNAME** to
+`<project>.pages.dev`; stray `A` records cause `522`/`523`.
+
+> Cloudflare is the only target with the full edge cache. It is the recommended host.
+
+### Vercel
+
+`vercel.json` rewrites all traffic to `api/index.js`, which reuses the same
+`server/app.js` dispatcher. Import the repo, no build command needed, optional
+`CACHE_TTL` env var.
+
+### Railway
+
+`railway.json` runs `node server/index.js`. Deploy from the repo; Railway uses Nixpacks
+and needs no configuration.
+
+### Render / Fly / Docker
+
+- **Render:** Blueprint from `render.yaml` (health check `/health`).
+- **Fly.io:** `fly launch --no-deploy` (reuses `fly.toml`) then `fly deploy`.
+- **Any Docker host:**
+  ```bash
+  docker build -t streamx-api . && docker run -d -p 8788:8788 streamx-api
+  ```
+
+On non-Cloudflare hosts the `caches` API is absent, so the edge cache no-ops and each
+request hits upstreams live — ideal to put a CDN/reverse-proxy cache in front.
+
+---
+
+## For AI agents
+
+StreamX ships first-class, downloadable agent assets so **Claude, Codex, Cursor, or any
+other agent** can use the API without hand-holding:
+
+| Asset | What it is |
+| --- | --- |
+| [`skill/SKILL.md`](./skill/SKILL.md) | A drop-in **AgentSkill** (front-matter `name`/`description` + full instructions). Clone the repo or copy this file into your agent's skills directory. |
+| [`skill/reference.md`](./skill/reference.md) | Complete endpoint/param/field reference for agents. |
+| [`llms.txt`](./llms.txt) · [`llms-full.txt`](./llms-full.txt) | The [`llms.txt`](https://llmstxt.org) discovery standard — point any LLM tooling here. |
+| [`AGENTS.md`](./AGENTS.md) | Repo conventions for coding agents working *on* the API. |
+| [`mcp/server.mjs`](./mcp/README.md) | A **zero-dependency MCP server** exposing the API as tools over stdio. |
+
+**Use the hosted API from an agent** — just give it the base URL:
+
+> "Use the keyless StreamX API at `https://api.streamx.qzz.io`. Search with
+> `/search?q=…`, then call `/meta`, `/scores`, `/credits`, `/streaming`, `/similar` by
+> IMDb id. Read `skill/SKILL.md` for the full reference."
+
+**Or run the MCP server:**
 
 ```bash
-cd api
-npx wrangler pages deploy public
+STREAMX_API_BASE=https://api.streamx.qzz.io node mcp/server.mjs
 ```
 
-### Custom domain
+Tools exposed: `streamx_search`, `streamx_meta`, `streamx_scores`,
+`streamx_streaming`, `streamx_credits`, `streamx_similar`, `streamx_person`,
+`streamx_trending`, `streamx_images`, `streamx_catalog`.
 
-Pages project → **Custom domains → Set up a custom domain** (e.g. `api.example.com`).
-Use a **proxied CNAME** to `<project>.pages.dev`; stray `A` records cause `522`/`523`.
+---
+
+## Self-hosting & forks
+
+Prefer your own URL? Fork the repo and deploy anywhere (see [Deploy](#deploy)). The code
+is **completely runtime-portable** and stays keyless:
+
+- **Same handlers everywhere** — `functions/**` run on Cloudflare *and* drive the Node
+  server (`server/`), Vercel (`api/index.js`) and Docker.
+- **Make it yours** — rename the `service` in `functions/health.js`, rebrand
+  `public/index.html`, and set `CACHE_TTL`. No rebuild needed.
+- **Point apps/agents at your URL** — set `API_BASE` in the web app's
+  `Web/config.js`, and `STREAMX_API_BASE` for the MCP server.
+- **Swap data sources** — every upstream is one file in `functions/_lib/`; add a
+  keyless source and wire it into a route (see [`AGENTS.md`](./AGENTS.md)).
+
+Full walkthrough, fork checklist and per-platform steps: **[`docs/SELF-HOST.md`](./docs/SELF-HOST.md)**.
 
 ---
 
@@ -309,6 +417,52 @@ curl "https://api.streamx.qzz.io/scores/series/tt0944947"
 }
 ```
 
+### People (credits, bios, similar)
+
+| Route | Description |
+| --- | --- |
+| `GET /credits/:type/:id` | Cast & crew for a title (Wikidata). |
+| `GET /person/:id` | Person bio by IMDb `nm…` or Wikidata `Q…` id. |
+| `GET /similar/:type/:id` | Sequels / same-director titles. |
+
+```bash
+curl "https://api.streamx.qzz.io/credits/movie/tt0133093"
+curl "https://api.streamx.qzz.io/person/nm0000206"
+curl "https://api.streamx.qzz.io/similar/movie/tt0133093"
+```
+
+`/credits` returns `cast[]`, `crew[]` and `directors[]`; each person carries `id`
+(IMDb `nm…` or Wikidata `Q…`), `name`, `role` (`cast` | `director` | `writer` |
+`composer` | `producer`), `image` and `description`:
+
+```json
+{
+  "ok": true,
+  "id": "tt0133093",
+  "type": "movie",
+  "cast": [
+    { "id": "nm0000206", "wikidataId": "Q43416", "name": "Keanu Reeves", "role": "cast", "image": "https://commons.wikimedia.org/...", "description": "Canadian actor" }
+  ],
+  "crew": [ { "id": "nm0905154", "wikidataId": "Q26720231", "name": "Lana Wachowski", "role": "director", "image": null } ],
+  "directors": [ { "name": "Lana Wachowski", "role": "director" } ],
+  "source": "wikidata"
+}
+```
+
+`/person` returns `name`, `description`, `image`, `born`, `died`, `externalIds`
+(`imdb`, `tmdb`, `twitter`, `instagram`) and a Wikipedia `wiki` summary.
+`/similar` returns the same `metas[]` shape as a catalogue.
+
+### Trending
+
+| Route | Description |
+| --- | --- |
+| `GET /trending/:type?limit=` | Popularity-ordered titles (Cinemeta top catalogue). |
+
+```bash
+curl "https://api.streamx.qzz.io/trending/movie?limit=20"
+```
+
 ### Where to watch
 
 | Route | Description |
@@ -371,7 +525,7 @@ curl "https://api.streamx.qzz.io/cinemeta/catalog/movie/top.json"
 {
   "ok": true,
   "service": "streamx-api",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "requiresApiKey": false,
   "upstreams": ["cinemeta","metahub","wikidata","wikipedia","imdb-suggestion","rottentomatoes","metacritic","justwatch","tvmaze","anilist"],
   "imageKinds": ["poster","background","logo"],
@@ -616,10 +770,13 @@ Ranked by impact toward being #1:
 A concrete plan to become the default keyless entertainment API.
 
 **Phase 1 — Close the breadth gap (0–1 mo)**
-- `/person/:id` (bio, images, credits) and cast/crew with roles on `/meta`.
-- `/similar/:type/:id`, `/recommendations/:type/:id`, `/collection/:id`.
-- `/trending?type=&window=day|week`, `/now-playing`, `/upcoming`.
-- Multi-image gallery + `language=` on `/meta`.
+- [x] `/person/:id` — bio, image, birth/death, external ids, Wikipedia summary. *(v1.3)*
+- [x] `/credits/:type/:id` — cast, crew and directors with roles & photos. *(v1.3)*
+- [x] `/similar/:type/:id` — sequels and same-director titles. *(v1.3)*
+- [x] `/trending/:type` — popularity-ordered titles. *(v1.3)*
+- [ ] `/recommendations/:type/:id`, `/collection/:id`.
+- [ ] `/now-playing`, `/upcoming`; a `window=day|week` option on trending.
+- [ ] Multi-image gallery + `language=` on `/meta`.
 
 **Phase 2 — Search & anime (1–2 mo)**
 - `/discover` with year/genre/person/rating filters and sorting.
@@ -650,11 +807,13 @@ call, everything**, with the breadth of TMDb and the openness of TVmaze.
 
 - Swap/add a data source in **`functions/_lib/upstream.js`**.
 - Tune the artwork matrix in **`functions/_lib/images.js`**.
-- Add enrichment in **`functions/_lib/enrich.js`**; scrapers/GraphQL in
-  **`scrape.js`**, **`scores.js`**, **`watch.js`**, **`tvmaze.js`**.
+- Add enrichment in **`functions/_lib/enrich.js`** and people data in
+  **`functions/_lib/people.js`**; scrapers/GraphQL in **`scrape.js`**, **`scores.js`**,
+  **`watch.js`**, **`tvmaze.js`**.
 - Add a route by creating a file under **`functions/`**
   (e.g. `functions/person/[id].js` → `/person/:id`). Underscore-prefixed files are
-  not routed.
+  not routed. Then register it in **`server/app.js`** so the portable Node/Vercel
+  server serves it too, and add it to **`functions/health.js`**.
 
 ---
 

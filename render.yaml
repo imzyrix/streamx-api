@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: streamx-api
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: node server/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: CACHE_TTL
+        value: "86400"

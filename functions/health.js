@@ -1,6 +1,6 @@
 import { json } from "./_lib/upstream.js";
 
-const VERSION = "1.2.0";
+const VERSION = "1.3.0";
 
 export function onRequestGet() {
   return json(
@@ -27,6 +27,10 @@ export function onRequestGet() {
         imdbSearch: "/imdb/search?q=",
         meta: "/meta/:type/:id?enrich=0",
         scores: "/scores/:type/:id",
+        credits: "/credits/:type/:id",
+        person: "/person/:id",
+        similar: "/similar/:type/:id",
+        trending: "/trending/:type?limit=",
         streaming: "/streaming/:type/:id?country=US",
         tv: "/tv/:id",
         anime: "/anime/search?q=",

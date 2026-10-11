@@ -1,0 +1,115 @@
+# StreamX API — full documentation for LLMs
+
+Keyless, self-hostable movie & TV metadata API.
+
+Base URL: https://api.streamx.qzz.io
+Fallback: https://streamx-api.pages.dev
+Source: https://github.com/imzyrix/streamx-api
+
+No API key, no signup. All routes are GET/HEAD; OPTIONS returns 204; CORS is *.
+Responses are JSON unless the route returns image bytes. Every response includes
+`ok: true` on success or `ok: false, error` on failure.
+
+`:type` is `movie` or `series` (aliases tv/show/tvshow/shows normalise to series).
+`:id` is an IMDb id like tt0133093. Person ids are nm0000206 (IMDb) or Q43416 (Wikidata).
+
+## Endpoints
+
+- GET /health — service status, version, upstreams, valid image sizes.
+- GET /catalog/:type/:catalog?genre=&skip=&search= — catalogue listing (:catalog defaults to "top").
+- GET /catalog/:type/:catalog/:genre — genre shorthand.
+- GET /search?q=&type=movie|series&skip= — title search.
+- GET /imdb/search?q= — IMDb suggestions (posters, year, top cast).
+- GET /anime/search?q= — AniList anime search.
+- GET /meta/:type/:id?enrich=0 — full details (+ images, externalIds, facts, wiki, seasons, videos).
+- GET /scores/:type/:id — IMDb + Rotten Tomatoes + Metacritic.
+- GET /credits/:type/:id — cast + crew (Wikidata).
+- GET /person/:id — person bio (nm… or Q…).
+- GET /similar/:type/:id — sequels / same-director titles.
+- GET /trending/:type?limit= — popularity-ordered titles.
+- GET /streaming/:type/:id?country=US — JustWatch offers.
+- GET /tv/:id — TVmaze show by IMDb or TVmaze id.
+- GET /images/:type/:id?direct=1 — full artwork manifest (all kinds x sizes).
+- GET /img/:kind/:size/:id/img — poster|background|logo at small|medium|large|original.
+- GET /img/still/:id/:season/:episode/:size — episode still (w92..w780, original).
+- GET /cinemeta/<path> — raw Cinemeta passthrough, edge-cached.
+
+## Examples
+
+curl -s "https://api.streamx.qzz.io/search?q=dune&type=movie"
+curl -s "https://api.streamx.qzz.io/catalog/movie/top?genre=Sci-Fi"
+curl -s "https://api.streamx.qzz.io/meta/movie/tt0133093"
+curl -s "https://api.streamx.qzz.io/scores/movie/tt0133093"
+curl -s "https://api.streamx.qzz.io/streaming/movie/tt0133093?country=US"
+curl -s "https://api.streamx.qzz.io/credits/movie/tt0133093"
+curl -s "https://api.streamx.qzz.io/person/nm0000206"
+curl -s "https://api.streamx.qzz.io/similar/movie/tt0133093"
+curl -s "https://api.streamx.qzz.io/trending/movie"
+curl -s "https://api.streamx.qzz.io/meta/series/tt0944947"
+curl -s "https://api.streamx.qzz.io/tv/tt0944947"
+curl -s "https://api.streamx.qzz.io/anime/search?q=frieren"
+https://api.streamx.qzz.io/img/poster/medium/tt0133093/img
+https://api.streamx.qzz.io/img/background/large/tt0133093/img
+https://api.streamx.qzz.io/img/still/tt0944947/1/1/w780
+
+## Response shapes
+
+Search / catalog / trending: { ok, type, count, metas: [ { id, type, name, poster, background, releaseInfo?, imdbRating?, genres? } ] }
+
+Scores: {
+  ok, type, id, title, year,
+  imdb: { rating, url } | null,
+  rottenTomatoes: { url, critics: { title, score, averageRating, reviewCount, sentiment, certified }, audience: { title, score, averageRating, reviewCount, sentiment } } | null,
+  metacritic: { url, critics: { title, score, reviewCount, bestRating }, contentRating } | null,
+  sources: { imdb, rottenTomatoes, metacritic }
+}
+
+Credits: {
+  ok, id, type,
+  cast:  [ { id, wikidataId, name, role: "cast", image, description } ],
+  crew:  [ { id, wikidataId, name, role: "director"|"writer"|"composer"|"producer", image } ],
+  directors: [ ...crew where role=director ]
+}
+
+Person: {
+  ok, id, wikidataId, name, description, image, born, died,
+  externalIds: { imdb, tmdb, twitter, instagram }, officialSite,
+  wiki: { title, extract, url } | null
+}
+
+Similar: { ok, id, type, count, metas: [ same shape as catalog ] }
+
+Streaming: {
+  ok, id, type, country,
+  providers: [ { name, types: ["subscription"|"free"|"ads"|"rent"|"buy"], quality: ["SD"|"HD"|"_4K"], webUrl } ],
+  justWatchUrl
+}
+
+TV: { ok, id, show: { name, network, status, schedule, rating, image, ... } }
+
+Anime: { ok, query, count, results: [ { id, title, averageScore, popularity, coverImage, episodes, format, seasonYear } ] }
+
+Images manifest: { ok, id, type, images: { poster: { small, medium, large, original }, background: {...}, logo: {...} } }
+
+## Metadata sources (all keyless)
+
+- Cinemeta: catalogs, search, details, episodes.
+- MetaHub: poster/background/logo, one per title; episode stills.
+- Wikidata SPARQL: budget, box office, external ids, cast/crew, person data.
+- Wikipedia REST: bio summary.
+- IMDb suggestion endpoint: search suggestions (do NOT scrape IMDb pages).
+- Rotten Tomatoes + Metacritic public pages: critic scores.
+- JustWatch GraphQL: streaming offers.
+- TVmaze: TV show data.
+- AniList GraphQL: anime.
+
+## Etiquette
+
+- Responses are edge-cached; repeated calls are cheap. Be reasonable on cold calls.
+- Optional/enriched fields are fail-soft and may be null — always null-check.
+- No API key is required and none is accepted.
+
+## Self-hosting
+
+Run the same code on Cloudflare Pages Functions, a plain Node server
+(Docker / Railway / Render / Fly), or Vercel. See docs/SELF-HOST.md.

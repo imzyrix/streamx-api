@@ -62,11 +62,18 @@
       <header>
         <h1>Stream<span>X</span> API</h1>
         <p class="lead">
-          Movie &amp; TV metadata, artwork sets, episode stills, critic scores and where-to-watch.
-          Self-hosted on Cloudflare Pages, edge-cached, no API key.
+          Movie &amp; TV metadata, artwork sets, episode stills, critic scores, cast &amp; crew
+          and where-to-watch. Runs on Cloudflare, Vercel, Railway or Docker &mdash; edge-cached,
+          no API key.
         </p>
         <p class="badge">No API key required</p>
-        <p class="sample">Status: <a href="/health">/health</a> · Docs: <a href="https://github.com/imzyrix/streamx-api">README</a></p>
+        <p class="sample">
+          Status: <a href="/health">/health</a> ·
+          Docs: <a href="https://github.com/imzyrix/streamx-api">README</a> ·
+          AI agents: <a href="https://github.com/imzyrix/streamx-api/blob/main/skill/SKILL.md">skill</a> ·
+          <a href="https://github.com/imzyrix/streamx-api/blob/main/llms.txt">llms.txt</a> ·
+          Self-host: <a href="https://github.com/imzyrix/streamx-api/blob/main/docs/SELF-HOST.md">guide</a>
+        </p>
       </header>
 
       <h2>Discovery</h2>
@@ -90,6 +97,14 @@
         <li><code>GET /streaming/movie/tt0133093?country=US</code><span class="m">JustWatch providers (rent/buy/stream)</span></li>
         <li><code>GET /tv/tt0944947</code><span class="m">TVmaze show info (network, schedule, rating)</span></li>
         <li><code>GET /anime/search?q=frieren</code><span class="m">AniList anime search</span></li>
+      </ul>
+
+      <h2>People &amp; discovery extras</h2>
+      <ul>
+        <li><code>GET /credits/movie/tt0133093</code><span class="m">Cast &amp; crew with roles and photos</span></li>
+        <li><code>GET /person/nm0000206</code><span class="m">Person bio, image, external IDs, Wikipedia</span></li>
+        <li><code>GET /similar/movie/tt0133093</code><span class="m">Sequels &amp; same-director titles</span></li>
+        <li><code>GET /trending/movie?limit=20</code><span class="m">Popularity-ordered titles</span></li>
       </ul>
 
       <h2>Images</h2>

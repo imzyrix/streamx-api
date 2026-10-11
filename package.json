@@ -1,13 +1,15 @@
 {
   "name": "streamx-api",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": true,
-  "description": "Keyless, self-hostable movie & TV metadata, artwork, scores and where-to-watch API for Cloudflare Pages",
+  "description": "Keyless, self-hostable movie & TV metadata, artwork, scores and where-to-watch API (Cloudflare Pages Functions, Node/Docker, Vercel, Railway)",
   "type": "module",
   "scripts": {
     "dev": "wrangler pages dev",
     "deploy": "wrangler pages deploy",
-    "tail": "wrangler pages deployment tail"
+    "tail": "wrangler pages deployment tail",
+    "start": "node server/index.js",
+    "serve": "node server/index.js"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"
