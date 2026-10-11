@@ -33,3 +33,8 @@ Base URL: https://api.streamx.qzz.io (fallback https://streamx-api.pages.dev)
 - All routes are `GET`/`HEAD`; `OPTIONS` → `204`; CORS `*`.
 - `:type` = `movie` | `series`; ids are IMDb `tt…`; person ids are `nm…` or `Q…`.
 - Upstream enrichment is fail-soft: optional fields may be `null`.
+
+## Author & license
+
+Made by [@imzyrix](https://github.com/imzyrix), part of [@zyrixdevs](https://github.com/zyrixdevs).
+Source code: MIT. Documentation: CC BY 4.0. See LICENSE and LICENSE-DOCS.

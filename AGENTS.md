@@ -33,7 +33,12 @@ skill/                agent skill (SKILL.md + reference.md) — keep in sync wit
 mcp/                  zero-dependency MCP server exposing the API as tools
 llms.txt / llms-full.txt   AI discovery docs
 docs/SELF-HOST.md     fork & self-host guide
+LICENSE               MIT (source code only — keep the notice when forking)
+LICENSE-DOCS          CC BY 4.0 (documentation & written content)
 ```
+
+Made by [@imzyrix](https://github.com/imzyrix), part of
+[@zyrixdevs](https://github.com/zyrixdevs).
 
 `server/app.js` maps every URL to the same `functions/**` handlers, so a new route
 must be added in **both** `functions/...` and the `ROUTES` table in `server/app.js`.

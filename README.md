@@ -15,6 +15,11 @@ https://api.streamx.qzz.io
 
 **Use it hosted — or fork it and run your own.** → [Self-hosting & forks](#self-hosting--forks) · **Using an AI agent?** → [For AI agents](#for-ai-agents)
 
+Made by **[@imzyrix](https://github.com/imzyrix)** · part of **[@zyrixdevs](https://github.com/zyrixdevs)**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Docs: CC BY 4.0](https://img.shields.io/badge/Docs-CC--BY--4.0-lightgrey.svg)](LICENSE-DOCS)
+
 ---
 
 ## Table of contents
@@ -193,6 +198,7 @@ api/
 ├── public/                     # landing / quick reference page
 ├── _preserved/tmdb-functions/  # old key-based implementation (not deployed)
 ├── Dockerfile · vercel.json · railway.json · render.yaml · fly.toml · wrangler.toml
+├── LICENSE · LICENSE-DOCS      # MIT (code) · CC BY 4.0 (docs)
 └── package.json
 ```
 
@@ -819,7 +825,19 @@ call, everything**, with the breadth of TMDb and the openness of TVmaze.
 
 ## Attribution & licensing
 
-Metadata and artwork are read from public sources: **Cinemeta**, **MetaHub**,
+**Project.** StreamX API is made by **[@imzyrix](https://github.com/imzyrix)** and is
+part of **[@zyrixdevs](https://github.com/zyrixdevs)**. It is released under **two
+licenses**, one for each kind of material:
+
+| Material | License | File |
+| --- | --- | --- |
+| Source code (`functions/`, `server/`, `api/`, `mcp/`, configs, `Dockerfile`, …) | **MIT** | [`LICENSE`](LICENSE) |
+| Documentation & written content (`README.md`, `docs/`, `skill/`, `llms*.txt`, …) | **CC BY 4.0** | [`LICENSE-DOCS`](LICENSE-DOCS) |
+
+In short: **use, fork, rebrand and self-host the code freely** (keep the copyright
+notice); **reuse the docs freely** with attribution to StreamX API / @imzyrix / @zyrixdevs.
+
+**Upstream data.** Metadata and artwork are read from public sources: **Cinemeta**, **MetaHub**,
 **Wikidata**, **Wikipedia**, **IMDb** (suggestions), **Rotten Tomatoes**,
 **Metacritic**, **JustWatch**, **TVmaze** and **AniList**. StreamX API only proxies and
 caches them and is not affiliated with any of them.

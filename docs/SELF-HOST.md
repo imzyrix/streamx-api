@@ -152,6 +152,10 @@ See `AGENTS.md` for the rules (no API keys, never delete code, fail-soft enrichm
 - [ ] Set `CACHE_TTL` if you want non-default caching.
 - [ ] Rebrand `service`/`package.json`/landing page.
 - [ ] Update the base URL in your app's `Web/config.js` and in agent configs.
+- [ ] Keep the copyright notice in `LICENSE` (MIT requires it).
 - [ ] (Optional) star the original repo and link back — appreciated, not required.
 
-Licensed MIT — fork it, rename it, ship it.
+**Licensing.** The code is **MIT** ([`LICENSE`](../LICENSE)) — fork it, rename it, ship
+it; just keep the copyright notice. The docs and written content are **CC BY 4.0**
+([`LICENSE-DOCS`](../LICENSE-DOCS)) — reuse freely with attribution to StreamX API,
+[@imzyrix](https://github.com/imzyrix) and [@zyrixdevs](https://github.com/zyrixdevs).

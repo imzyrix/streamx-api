@@ -113,3 +113,8 @@ Images manifest: { ok, id, type, images: { poster: { small, medium, large, origi
 
 Run the same code on Cloudflare Pages Functions, a plain Node server
 (Docker / Railway / Render / Fly), or Vercel. See docs/SELF-HOST.md.
+
+---
+
+Made by [@imzyrix](https://github.com/imzyrix), part of [@zyrixdevs](https://github.com/zyrixdevs).
+Source code licensed MIT; documentation licensed CC BY 4.0.

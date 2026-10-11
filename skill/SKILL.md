@@ -134,3 +134,8 @@ Point any MCP client's stdio transport at that command.
   handles it server-side.
 - See `skill/reference.md` for the complete field-by-field reference and
   `README.md` for architecture, deploy and self-hosting.
+
+---
+
+Made by [@imzyrix](https://github.com/imzyrix) · part of
+[@zyrixdevs](https://github.com/zyrixdevs). Source code: MIT · documentation: CC BY 4.0.
