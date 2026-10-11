@@ -27,6 +27,16 @@
       h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: -0.01em; }
       h1 span { color: var(--accent); }
       p.lead { margin: 0; color: var(--muted); }
+      .badge {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #7ee0a6;
+        border: 1px solid #2a4133;
+        background: #101a14;
+        padding: 2px 8px;
+        border-radius: 999px;
+      }
       h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 32px 0 12px; }
       ul { list-style: none; margin: 0; padding: 0; }
       li {
@@ -44,7 +54,7 @@
       .m { color: var(--muted); }
       a { color: #6ea8fe; text-decoration: none; }
       a:hover { text-decoration: underline; }
-      .sample { font-size: 13px; color: var(--muted); margin-top: 4px; }
+      .sample { font-size: 13px; color: var(--muted); margin-top: 6px; }
     </style>
   </head>
   <body>
@@ -52,33 +62,35 @@
       <header>
         <h1>Stream<span>X</span> API</h1>
         <p class="lead">
-          Self-hosted movie &amp; TV metadata and poster API. Backed by TMDB, edge-cached on Cloudflare.
+          Movie &amp; TV metadata and posters. Self-hosted on Cloudflare Pages, edge-cached.
         </p>
+        <p class="badge">No API key required</p>
         <p class="sample">Status: <a href="/health">/health</a></p>
       </header>
 
       <h2>Discovery</h2>
       <ul>
-        <li><code>GET /trending?type=movie|tv|all&amp;window=day|week</code><span class="m">Trending titles</span></li>
-        <li><code>GET /search?q=matrix&amp;type=multi</code><span class="m">Search</span></li>
-        <li><code>GET /discover?type=movie&amp;with_genres=28&amp;sort_by=popularity.desc</code><span class="m">Browse / filter</span></li>
-        <li><code>GET /genres?type=movie|tv</code><span class="m">Genre list</span></li>
-        <li><code>GET /configuration</code><span class="m">Image base config</span></li>
+        <li><code>GET /catalog/movie/top?genre=Action&amp;skip=0</code><span class="m">Top movies</span></li>
+        <li><code>GET /catalog/series/top?genre=Drama</code><span class="m">Top series</span></li>
+        <li><code>GET /search?q=dune&amp;type=movie</code><span class="m">Search</span></li>
       </ul>
 
       <h2>Details</h2>
       <ul>
-        <li><code>GET /movie/:id?append=credits,videos,images</code><span class="m">Movie details</span></li>
-        <li><code>GET /tv/:id?append=credits,videos,images</code><span class="m">TV details</span></li>
-        <li><code>GET /tv/:id/season/:n</code><span class="m">Season + episodes</span></li>
-        <li><code>GET /person/:id</code><span class="m">Person + credits</span></li>
-        <li><code>GET /collection/:id</code><span class="m">Collection</span></li>
+        <li><code>GET /meta/movie/tt0133093</code><span class="m">Movie details</span></li>
+        <li><code>GET /meta/series/tt0944947</code><span class="m">Series details + episodes</span></li>
       </ul>
 
-      <h2>Raw &amp; images</h2>
+      <h2>Images</h2>
       <ul>
-        <li><code>GET /v3/:any-tmdb-path</code><span class="m">Full TMDB passthrough</span></li>
-        <li><code>GET /img/:size/:file</code><span class="m">Poster / backdrop proxy, e.g. /img/w500/abc.jpg</span></li>
+        <li><code>GET /img/poster/medium/tt0133093/img</code><span class="m">Poster</span></li>
+        <li><code>GET /img/background/large/tt0133093/img</code><span class="m">Backdrop</span></li>
+        <li><code>GET /img/logo/medium/tt0133093/img</code><span class="m">Logo</span></li>
+      </ul>
+
+      <h2>Raw</h2>
+      <ul>
+        <li><code>GET /cinemeta/catalog/movie/top.json</code><span class="m">Raw upstream passthrough</span></li>
       </ul>
     </main>
   </body>

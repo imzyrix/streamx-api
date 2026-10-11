@@ -1,14 +1,12 @@
-import { json } from "./_lib/tmdb.js";
+import { json } from "./_lib/upstream.js";
 
-export function onRequestGet(context) {
-  const { env } = context;
-  const configured = Boolean((env && env.TMDB_API_KEY) || (env && env.TMDB_ACCESS_TOKEN));
+export function onRequestGet() {
   return json(
     {
       ok: true,
       service: "streamx-api",
-      source: "tmdb",
-      credentialsConfigured: configured,
+      source: "cinemeta",
+      requiresApiKey: false,
       time: new Date().toISOString(),
     },
     { headers: { "cache-control": "no-store" } },

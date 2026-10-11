@@ -2,7 +2,7 @@
   "name": "streamx-api",
   "version": "1.0.0",
   "private": true,
-  "description": "Self-hostable movie & TV metadata API for Cloudflare Pages",
+  "description": "Keyless self-hostable movie & TV metadata and poster API for Cloudflare Pages",
   "type": "module",
   "scripts": {
     "dev": "wrangler pages dev",
