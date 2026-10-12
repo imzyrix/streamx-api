@@ -58,6 +58,12 @@ export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000)
 }
 */
 
+// ORIGINAL (preserved, not deleted — disabled by comment): built a Request from the
+// raw key and called cache.match/cache.put unguarded. Bare keys such as
+// "people:credits:tt0133093" are accepted by new Request() but rejected by the
+// Cache API with "Cache API keys must be fully-qualified, valid URLs", which
+// 500'd /credits, /similar and /person.
+/*
 export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000) {
   const cache = cacheStore();
   let cacheRequest = null;
@@ -73,7 +79,7 @@ export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000)
         try {
           return await hit.json();
         } catch {
-          /* recompute */
+          // recompute
         }
       }
     }
@@ -94,6 +100,61 @@ export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000)
           headers: { "content-type": "application/json", "cache-control": `public, max-age=${ttl}` },
         }),
       ),
+    );
+  }
+
+  return data;
+}
+*/
+
+function cacheKeyRequest(key) {
+  const raw = String(key ?? "");
+  const absolute = /^https?:\/\//i.test(raw)
+    ? raw
+    : `https://streamx.internal/cache/${encodeURIComponent(raw)}`;
+  try {
+    return new Request(absolute, { method: "GET" });
+  } catch {
+    return null;
+  }
+}
+
+export async function cachedValue(context, key, ttl, producer, timeoutMs = 6000) {
+  const cache = cacheStore();
+  const cacheRequest = cache ? cacheKeyRequest(key) : null;
+
+  if (cache && cacheRequest) {
+    try {
+      const hit = await cache.match(cacheRequest);
+      if (hit) {
+        try {
+          return await hit.json();
+        } catch {
+          /* recompute */
+        }
+      }
+    } catch {
+      /* cache read failed — fall through to the producer */
+    }
+  }
+
+  let data = null;
+  try {
+    data = await withTimeout(producer(), timeoutMs);
+  } catch {
+    return null;
+  }
+
+  if (data && cache && cacheRequest && context && context.waitUntil) {
+    context.waitUntil(
+      cache
+        .put(
+          cacheRequest,
+          new Response(JSON.stringify(data), {
+            headers: { "content-type": "application/json", "cache-control": `public, max-age=${ttl}` },
+          }),
+        )
+        .catch(() => {}),
     );
   }
 
